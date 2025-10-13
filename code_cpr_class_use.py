@@ -34,17 +34,15 @@ def on_signal():
 
 
 on_signal()
+print("Ready!")
 
 while True:    
     if not depth_calibration.button_off.value:
         depth_calibration.calibrate()
-        five_cm_mark = depth_calibration.five_cal
-        six_cm_mark = depth_calibration.six_cal
         time.sleep(0.1)
     elif depth_calibration.calibrated and frequency_calculation.press_end:
         if sensor.proximity > frequency_calculation.top + 5:
-            frequency_calculation.press_end = False
             frequency_calculation.update()
-        time.sleep(0.02)
+        time.sleep(0.05)
     else:
-        time.sleep(0.1)
+        time.sleep(0.05)

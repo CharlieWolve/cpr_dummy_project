@@ -1,7 +1,5 @@
 import time
 import math
-import project_rgb_led as rgb
-import adafruit_vcnl4200 as vcnl
 
 class Calculate:
     
@@ -32,19 +30,19 @@ class Calculate:
             self.bpm_led.set_off()
     
     def color_choice_depth(self, proximity) -> None:
-        if proximity <= self.d_dict["not_enough"]:
+        if proximity <= self.d_dict["fourty"]:
             self.depth_led.set_red()
 #             print("red")
-        elif self.d_dict["not_enough"] < proximity <= self.d_dict["min"]:
+        elif self.d_dict["fourty"] < proximity <= self.d_dict["fourtyfive"]:
             self.depth_led.set_yellow()
 #             print("yellow")
-        elif self.d_dict["min"] < proximity <= self.d_dict["max"]:
+        elif self.d_dict["fourtyfive"] < proximity <= self.d_dict["fiftyfive"]:
             self.depth_led.set_green()
 #             print("green")
-        elif self.d_dict["max"] < proximity <= self.d_dict["too_much"]:
+        elif self.d_dict["fiftyfive"] < proximity <= self.d_dict["sixty"]:
             self.depth_led.set_purple()
 #             print("purple")
-        elif self.d_dict["too_much"] <= proximity:
+        elif self.d_dict["sixty"] <= proximity:
             self.depth_led.set_blue()
 #             print("blue")
         else:
@@ -71,18 +69,12 @@ class Calculate:
             self.mean_freq = self.frequency_mean(frequency)
             print(f"frequencies: {self.f_list}, mean: {self.mean_freq}")
             self.color_choice_freq(self.mean_freq)
-            
-    def calc_jittersafe(self) -> int:
-        one_cm_diff = self.d_dict["six_cm"] - self.d_dict["five_cm"]
-        jittersafe = math.floor(one_cm_diff/10)
-        return jittersafe
 
     def update(self) -> None:
         self.press_end = False
         self.refresh_time_values()
-        jittersafe = self.calc_jittersafe()
         prev_prox = self.sensor.proximity
-        while self.sensor.proximity > prev_prox - jittersafe:
+        while self.sensor.proximity > prev_prox - 5:
             print(f'old_prox: {prev_prox}')
             prev_prox = self.sensor.proximity
             print(f'new_prox: {prev_prox}')
@@ -95,6 +87,3 @@ class Calculate:
                 self.press_end = True
             time.sleep(0.02)
         
-        
-        
-

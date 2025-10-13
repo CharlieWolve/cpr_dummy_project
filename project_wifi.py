@@ -3,20 +3,32 @@ import time
 import ssl
 import wifi
 import socketpool
-import adafruit_connection_manager
 import microcontroller
-import board
-import busio
 import adafruit_requests
 from adafruit_io.adafruit_io import IO_HTTP, AdafruitIO_RequestError
 
-try:
-    wifi.radio.connect(
-        os.getenv("CIRCUITPY_WIFI_SSID"), os.getenv("CIRCUITPY_WIFI_PASSWORD")
-    )
-except TypeError:
-    print("Could not find WiFi info. Check your settings.toml file!")
-    raise
+ptr = 0
+while not wifi.radio.connected:
+    try:
+        SSID, PASSWORD = os.getenv("WIFI_SSID"+str(ptr)), os.getenv("WIFI_PASSWORD"+str(ptr))
+    except:
+        SSID, PASSWORD = 'Null', 'Null'
+    s = 5
+    if ptr < os.getenv("WIFI_ROUTERS"): print(' ', end='')
+    print(ptr, SSID, '.'*s, end=' ')
+    try:
+        print('WiFi Connecting.', end='')
+        wifi.radio.connect(SSID, PASSWORD)
+    except:
+        ptr += 1
+        print('\b\b\bon Failed.')
+    if ptr > os.getenv("WIFI_ROUTERS"):
+        try:
+            wifi.radio.connect(SSID, PASSWORD)
+        except TypeError:
+            print("Could not find WiFi info. Check your settings.toml file!")
+            raise
+
 try:
     aio_username = os.getenv("ADAFRUIT_AIO_USERNAME")
     aio_key = os.getenv("ADAFRUIT_AIO_KEY")
@@ -35,35 +47,33 @@ class Depth_Visualization:
         self.six_cm_mark = 0
         self.function_m = 0
         self.function_t = 0
-        self.feednames = []
-        pool = socketpool.SocketPool(wifi.radio)
-        requests = adafruit_requests.Session(pool, ssl.create_default_context())
+        self.feednames = ["distance", "proximity"]
         
+        pool = socketpool.SocketPool(wifi.radio)
+        requests = adafruit_requests.Session(pool, ssl.create_default_context())            
         # Initialize an Adafruit IO HTTP API object
         self.io = IO_HTTP(aio_username, aio_key, requests)
-        print("connected to io")
+        print("\nConnected to io!")
         
     def create_linear_function(self) -> None:
         self.function_m = 1 / (self.six_cm_mark - self.five_cm_mark)
         self.function_t = 5 - self.function_m * self.five_cm_mark
     
-    def start_feed(self) -> None: 
+    def create_feed(self, feed) -> None: 
         try:
         # get feed
-            distance_feed = io.get_feed("distance")
+            return self.io.get_feed(feed)
         except AdafruitIO_RequestError:
         # if no feed exists, create one
-            distance_feed = io.create_new_feed("distance")
-
-        # append feed for distance
-        feed_names.append(distance_feed)
-        print("feeds created")
+            return self.io.create_new_feed("distance")
     
     def start_connection(self, five_cm_mark, six_cm_mark) -> None:
         self.five_cm_mark = five_cm_mark
         self.six_cm_mark = six_cm_mark
         self.create_linear_function()
-        self.start_feed()
+        for name in self.feednames:
+            self.feedlist.append(self.create_feed(name))
+            print(f'Feed {name} has been created')
     
     def microcontroller_reset() -> None: 
         print("Resetting microcontroller in 10 seconds")
@@ -72,4 +82,5 @@ class Depth_Visualization:
     
     def send_proximity(self, proximity) -> None:
         distance = self.function_m * proximity + self.function_t
-        io.send_data(feed_names[0]["key"], distance)
+        self.io.send_data(self.feedlist[0]["key"], distance)
+        self.io.send_data(self.feedlist[1]["key"], proximity)
