@@ -17,7 +17,6 @@ class Calibrate:
         self.depth_led = depth_led
         self.bpm_led = bpm_led
         self.calibrated = False
-        self.calibration_reset = False
         self.threshold_dict = {"fourty": 0, "fourtyfive": 0, "fiftyfive": 0, "sixty": 0}
 
     def color_selection(self, led: RGB_LED) -> None:
@@ -46,28 +45,23 @@ class Calibrate:
         self.calibration_signal
         last_proximities.append(self.sensor.proximity)
         self.calibration_signal
-        if self.button_raised:
-            deviation = stdev(last_proximities)
-            old_time = time.monotonic()
-            new_time = time.monotonic()
-            time_diff = new_time - old_time
-            while time_diff < 3:
-                if deviation > 5 and self.sensor.proximity > first_proximity +5: 
-                    old_time = new_time
-                    new_time = time.monotonic()
-                    time_diff = new_time - old_time    
-                else:
-                    new_time = time.monotonic()
-                    time_diff = new_time - old_time
-                self.calibration_signal()
-                last_proximities.pop(0)
-                last_proximities.append(self.sensor.proximity)
-                deviation = stdev(last_proximities)      
-            return mean(last_proximities)
-        self.bpm_led.set_white()
-        self.depth_led.set_white()
-        self.calibration_reset = True
-        return 0
+        deviation = stdev(last_proximities)
+        old_time = time.monotonic()
+        new_time = time.monotonic()
+        time_diff = new_time - old_time
+        while time_diff < 3:
+            if deviation > 5 and self.sensor.proximity > first_proximity +5: 
+                old_time = new_time
+                new_time = time.monotonic()
+                time_diff = new_time - old_time    
+            else:
+                new_time = time.monotonic()
+                time_diff = new_time - old_time
+            self.calibration_signal()
+            last_proximities.pop(0)
+            last_proximities.append(self.sensor.proximity)
+            deviation = stdev(last_proximities)      
+        return mean(last_proximities)
     
     def get_calibration_distance(self)-> int:
         self.depth_led.set_off()
@@ -75,39 +69,17 @@ class Calibrate:
         target_mean = self.check_for_stop()
         return math.floor(target_mean)
         
-    def recalibration_check(self) -> None:
-        if self.calibrated:
-            for key in self.threshold_dict.keys():
-                self.threshold_dict[key] = 0
-            self.calibrated = False
-        
     def calibrate(self) -> None:
         self.recalibration_check()
         distance = self.get_calibration_distance()
-
         if self.threshold_dict["fourty"] == 0:
-            if self.calibration_reset:
-                self.calibration_reset = False
-            else:
-                self.threshold_dict["fourty"] = distance
+            self.threshold_dict["fourty"] = distance
         elif self.threshold_dict["fourtyfive"] == 0:
-            if self.calibration_reset:
-                self.threshold_dict["fourty"] = 0
-                self.calibration_reset = False
-            else:
-                self.threshold_dict["fourtyfive"] = distance
-        elif self.threshold_dict["fiftyfive"] == 0:            
-            if self.calibration_reset:
-                self.threshold_dict["fourtyfive"] = 0
-                self.calibration_reset = False
-            else:
-                self.threshold_dict["fiftyfive"] = distance
+            self.threshold_dict["fourtyfive"] = distance
+        elif self.threshold_dict["fiftyfive"] == 0:   
+            self.threshold_dict["fiftyfive"] = distance
         elif self.threshold_dict["sixty"] == 0:
-            if self.calibration_reset:
-                self.threshold_dict["fiftyfive"] = 0
-                self.calibration_reset = False
-            else:
-                self.threshold_dict["sixty"] = distance
-                self.calibrated = True
+            self.threshold_dict["sixty"] = distance
+            self.calibrated = True
         print(self.threshold_dict)
     
