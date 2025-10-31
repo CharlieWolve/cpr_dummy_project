@@ -1,5 +1,5 @@
 import time
-import digitalio
+import digitalio # type: ignore
 
 class RGB_LED:
     
@@ -34,6 +34,16 @@ class RGB_LED:
     def set_purple(self) -> None:
         self.red_led.value = True
         self.green_led.value = False
+        self.blue_led.value = True
+    
+    def set_white(self) -> None:
+        self.red_led.value = True
+        self.green_led.value = True
+        self.blue_led.value = True
+
+    def set_cyan(self) -> None:
+        self.red_led.value = False
+        self.green_led.value = True
         self.blue_led.value = True
         
     def set_off(self) -> None:

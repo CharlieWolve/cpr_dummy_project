@@ -1,5 +1,7 @@
 import time
 import math
+from project_rgb_led import RGB_LED
+from adafruit_vcnl4200 import Adafruit_VCNL4200 # type: ignore 
 
 class Calculate:
     

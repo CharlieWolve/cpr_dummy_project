@@ -1,11 +1,11 @@
 import os
 import time
 import ssl
-import wifi
-import socketpool
-import microcontroller
-import adafruit_requests
-from adafruit_io.adafruit_io import IO_HTTP, AdafruitIO_RequestError
+import wifi # type: ignore
+import socketpool # type: ignore
+import microcontroller # type: ignore
+import adafruit_requests # type: ignore
+from adafruit_io.adafruit_io import IO_HTTP, AdafruitIO_RequestError # type: ignore
 
 ptr = 0
 while not wifi.radio.connected:
