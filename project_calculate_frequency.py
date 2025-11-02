@@ -70,22 +70,19 @@ class Calculate:
             frequency = math.floor(1 / (self.delta_press_time / 60))
             self.mean_freq = self.frequency_mean(frequency)
             print(f"frequencies: {self.f_list}, mean: {self.mean_freq}")
-            self.color_choice_freq(self.mean_freq)
 
     def update(self) -> None:
         self.press_end = False
         self.refresh_time_values()
         prev_prox = self.sensor.proximity
         while self.sensor.proximity > prev_prox - 5:
-            print(f'old_prox: {prev_prox}')
             prev_prox = self.sensor.proximity
-            print(f'new_prox: {prev_prox}')
             time.sleep(0.01)
-        print(f"proximity: {prev_prox}")
         self.color_choice_depth(prev_prox)
         self.calculation()
+        self.color_choice_freq(self.mean_freq)
         while not self.press_end:
-            if self.sensor.proximity < self.top + 5:  # standard (completely decompressed)#
+            if self.sensor.proximity < self.top + 5:  # standard (completely decompressed)
                 self.press_end = True
             time.sleep(0.02)
         

@@ -70,7 +70,6 @@ class Calibrate:
         return math.floor(target_mean)
         
     def calibrate(self) -> None:
-        self.recalibration_check()
         distance = self.get_calibration_distance()
         if self.threshold_dict["fourty"] == 0:
             self.threshold_dict["fourty"] = distance

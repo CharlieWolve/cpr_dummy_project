@@ -65,6 +65,7 @@ while True:
             time.sleep(1.5)
             if not depth_calibration.button_raised.value:
                 training_mode = True
+                true_start = False
                 training_signal()
             else: 
                 true_start = not true_start
