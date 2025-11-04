@@ -7,9 +7,6 @@ import project_calibrate_depth as calib
 import project_calculate_frequency as calc
 import project_frequency_training as f_training
 
-# Rekalibrierungsfunktion
-# 2. LED für Rythmus
-# bpm Messung
 
 depth_rgb_gp = [board.GP2, board.GP1, board.GP0]
 bpm_rgb_gp = [board.GP10, board.GP11, board.GP12]
@@ -36,8 +33,8 @@ def on_signal():
 
 def start_signal():
     for i in range(2):
-        depth_led.set_white()
-        bpm_led.set_white()
+        depth_led.set_green()
+        bpm_led.set_green()
         time.sleep(0.1)
         depth_led.set_off()
         bpm_led.set_off()
@@ -47,6 +44,15 @@ def training_signal():
     for i in range(2):
         depth_led.set_cyan()
         bpm_led.set_cyan()
+        time.sleep(0.1)
+        depth_led.set_off()
+        bpm_led.set_off()
+        time.sleep(0.1)
+
+def off_signal():
+    for i in range(2):
+        depth_led.set_white()
+        bpm_led.set_white()
         time.sleep(0.1)
         depth_led.set_off()
         bpm_led.set_off()
@@ -67,6 +73,7 @@ while True:
                 training_mode = True
                 true_start = False
                 training_signal()
+                time.sleep(0.5)
             else: 
                 true_start = not true_start
                 if true_start:

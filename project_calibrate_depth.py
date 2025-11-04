@@ -41,10 +41,10 @@ class Calibrate:
         self.calibration_signal()
         first_proximity = self.sensor.proximity
         last_proximities = [first_proximity]
-        last_proximities.append(first_proximity)
-        self.calibration_signal
+        self.calibration_signal()
         last_proximities.append(self.sensor.proximity)
-        self.calibration_signal
+        self.calibration_signal()
+        last_proximities.append(self.sensor.proximity)
         deviation = stdev(last_proximities)
         old_time = time.monotonic()
         new_time = time.monotonic()
