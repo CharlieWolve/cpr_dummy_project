@@ -4,8 +4,8 @@ import digitalio # type: ignore
 from project_rgb_led import RGB_LED
 from project_statistics import mean, stdev
 from adafruit_vcnl4200 import Adafruit_VCNL4200 # type: ignore 
-from board import Pin # type: ignore 
-# correct import? 
+
+
 
 
 class Calibrate:

@@ -84,5 +84,5 @@ class Calculate:
         while not self.press_end:
             if self.sensor.proximity < self.top + 5:  # standard (completely decompressed)
                 self.press_end = True
-            time.sleep(0.02)
+            time.sleep(0.01)
         

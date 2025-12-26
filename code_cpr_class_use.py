@@ -79,7 +79,7 @@ while True:
                 if true_start:
                     start_signal()
                 else:
-                    on_signal()
+                    off_signal()
                 training_mode = False
         time.sleep(0.1)
     elif true_start and frequency_calculation.press_end:
@@ -87,7 +87,7 @@ while True:
             frequency_calculation.update()
         time.sleep(0.05)
     elif training_mode and training.press_end:
-        if sensor.proximity > frequency_calculation.top + 5:
+        if sensor.proximity > training.top + 5:
             training.update()
         time.sleep(0.05)
         training.time_check()
