@@ -20,3 +20,6 @@ copy these libraries onto your microcontroler in a 'lib' folder
 Once done copy the code from 'code_cpr_class_use.py' into the code.py file and add the rest of our files (project_xxx.py) into the library folder.
 
 Once the microcontroller is connected to the soldered board everything should be good to go.
+
+For building the physical parts of the dummy download the stl_files folder and extract the files. Print the parts and build it according to the manual.
+If you want to edit details to your liking you can download the stp_files folder and experiment to your liking. 
