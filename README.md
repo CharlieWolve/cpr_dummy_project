@@ -15,9 +15,9 @@ Once you have extracted the files choose the relevant libraries which are:
 - adafruit_bus_device (folder)
 - adafruit_vcnl4200 (mpy-file)
 
-copy these libraries onto your microcontroler in a 'lib' folder
+copy these libraries onto your microcontroller in a 'lib' folder
 
-Once done copy the code from 'code_cpr_class_use.py' into the code.py file and add the rest of our files (project_xxx.py) into the library folder.
+Once done download the 'code.py' file onto your microcontroller and add the rest of our files (project_xxx.py) into the library folder.
 
 Once the microcontroller is connected to the soldered board everything should be good to go.
 
