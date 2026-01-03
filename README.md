@@ -1,5 +1,7 @@
 # cpr_dummy_project
-Student project at TH Nürnberg Georg-Simon-Ohm to create a DIY reanimation Dummy for public use
+Student project at TH Nürnberg Georg-Simon-Ohm to create a DIY reanimation dummy for public use
+
+Download the file "Anleitung" which is the manual to build this project and contains the parts you need. Once you bought everything on the list you can go ahead and build your own reanimation dummy.
 
 To use this code on your Rasperry Pi Pico start by following this guide:
 https://learn.adafruit.com/welcome-to-circuitpython
